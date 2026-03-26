@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 // import
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 
 // 継承
