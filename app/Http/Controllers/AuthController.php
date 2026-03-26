@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 // import
+use Firebase\JWT\JWT;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -56,9 +57,26 @@ class AuthController extends Controller{
             ], 401);
         }
 
+        // 現在時間
+        $now = time();
+        // トークンの有効時間
+        $ttl = (int) env('TOKEN_TTL', 60);
+
+        // トークンの中身
+        $payload = [
+            'sub' => $user->id,
+            'email' => $user->email,
+            'iat' => $now,
+            'exp' => $now + ($ttl * 60),
+        ];
+
+        // トークン作成
+         $token = JWT::encode($payload, env('TOKEN_SECRET'), 'HS256');
+
         // ログイン成功
         return response()->json([
-            'message' => 'login ok'
+            'message' => 'login ok',
+            'token' => $token,
         ]);
     }
 }
