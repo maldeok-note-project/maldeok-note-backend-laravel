@@ -16,13 +16,6 @@ class UserProfileController extends Controller
     // ユーザー情報更新
     public function update(Request $request)
     {
-        // 条件
-        $request->validate([
-            'name' => 'nullable|string|max:255',
-            'email' => 'nullable|email',
-            'password' => 'nullable|string|min:6',
-        ]);
-
         $token = $request->bearerToken();
 
         // トークン確認
@@ -34,7 +27,15 @@ class UserProfileController extends Controller
 
         $decoded = JWT::decode($token, new Key(env('TOKEN_SECRET'), 'HS256'));
 
-        $userId = $decoded->sub;
+        $userId = $decoded->sub;        
+
+
+        // 条件
+        $request->validate([
+            'name' => 'nullable|string|max:255',
+            'nullable|email|unique:users,email,' . $userId,
+            'password' => 'nullable|string|min:6',
+        ]);
 
         $user = User::find($userId);
 
