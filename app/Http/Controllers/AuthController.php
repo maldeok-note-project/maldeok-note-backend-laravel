@@ -26,7 +26,7 @@ class AuthController extends Controller{
         $user = User::create([
                     'name' => $request->name,
                     'email' => $request->email,
-                    'password' => $request->password,
+                    'password' => Hash::make($request->password),
                 ]);
 
         // 結果出力
@@ -67,6 +67,7 @@ class AuthController extends Controller{
             'sub' => $user->id,
             'email' => $user->email,
             'iat' => $now,
+            // 有効期限
             'exp' => $now + ($ttl * 60),
         ];
 
