@@ -38,7 +38,7 @@ class UserProfileController extends Controller
             ], 404);
         }
 
-        // 変更内容
+        // 変更内容があれば更新
         if ($request->filled('name')) {
             $user->name = $request->name;
         }
@@ -50,7 +50,7 @@ class UserProfileController extends Controller
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
         }
-        // 保存した内容をDBに保存
+        // 保存
         $user->save();
 
         return response()->json([
