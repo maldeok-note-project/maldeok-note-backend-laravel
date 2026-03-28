@@ -12,7 +12,7 @@ class UpdateProfileRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,7 @@ class UpdateProfileRequest extends FormRequest
     {
         $userId = $this->attributes->get('auth_user_id');
 
+        // 条件
         return [
             'name' => 'nullable|string|max:255',
             'email' => 'nullable|email|unique:users,email,' . $userId,

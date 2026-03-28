@@ -12,4 +12,6 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 // ユーザー情報更新
-Route::patch('/me', [UserProfileController::class, 'update']);
+Route::middleware('jwt.auth')->group(function(){
+    Route::patch('/me', [UserProfileController::class, 'update']);
+});
