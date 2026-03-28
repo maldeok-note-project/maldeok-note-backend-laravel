@@ -7,6 +7,7 @@ use App\Models\User;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 
 // 継承
@@ -30,7 +31,30 @@ class UserProfileController extends Controller
 
         $user = User::find($userId);
 
+        // IDが違う場合
+        if (!$user) {
+            return response()->json([
+                'message' => 'user not found'
+            ], 404);
+        }
+
+        // 変更内容
+        if ($request->filled('name')) {
+            $user->name = $request->name;
+        }
+
+        if ($request->filled('email')) {
+            $user->email = $request->email;
+        }
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+        // 保存した内容をDBに保存
+        $user->save();
+
         return response()->json([
+            'message' => 'profile update ok',
             'data' => $user
         ]);
     }
