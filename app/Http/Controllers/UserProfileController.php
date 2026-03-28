@@ -16,6 +16,13 @@ class UserProfileController extends Controller
     // ユーザー情報更新
     public function update(Request $request)
     {
+        // 条件
+        $request->validate([
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|email',
+            'password' => 'nullable|string|min:6',
+        ]);
+
         $token = $request->bearerToken();
 
         // トークン確認
