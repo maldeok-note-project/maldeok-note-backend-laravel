@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+// import
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Illuminate\Http\Request;
 
+
+// 継承
 class UserProfileController extends Controller
 {
     // ユーザー情報更新
@@ -11,8 +16,19 @@ class UserProfileController extends Controller
     {
         $token = $request->bearerToken();
 
+        // トークン確認
+        if (!$token) {
+            return response()->json([
+                'message' => 'token not found'
+            ], 401);
+        }
+
+        $decoded = JWT::decode($token, new Key(env('TOKEN_SECRET'), 'HS256'));
+
+        $userId = $decoded->sub;
+
         return response()->json([
-            'token' => $token
+            'user_id' => $userId
         ]);
     }
 }
