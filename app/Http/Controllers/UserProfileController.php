@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 // import
+use App\Models\User;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Http\Request;
@@ -27,8 +28,10 @@ class UserProfileController extends Controller
 
         $userId = $decoded->sub;
 
+        $user = User::find($userId);
+
         return response()->json([
-            'user_id' => $userId
+            'data' => $user
         ]);
     }
 }
