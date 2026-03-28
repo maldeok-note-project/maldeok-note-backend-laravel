@@ -25,21 +25,25 @@ class UserProfileController extends Controller
             ], 401);
         }
 
-        $decoded = JWT::decode($token, new Key(env('TOKEN_SECRET'), 'HS256'));
-
-        $userId = $decoded->sub;        
-
-
+        try{
+            $decoded = JWT::decode($token, new Key(env('TOKEN_SECRET'), 'HS256'));
+            $userId = $decoded->sub;
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'invalid token'
+            ], 401);
+        }
+        
         // 条件
         $request->validate([
             'name' => 'nullable|string|max:255',
-            'nullable|email|unique:users,email,' . $userId,
+            'email' => 'nullable|email|unique:users,email,' . $userId,
             'password' => 'nullable|string|min:6',
         ]);
 
         $user = User::find($userId);
 
-        // IDが違う場合
+        // userが見つからない場合
         if (!$user) {
             return response()->json([
                 'message' => 'user not found'
