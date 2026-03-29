@@ -15,3 +15,9 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('jwt.auth')->group(function(){
     Route::patch('/me', [UserProfileController::class, 'update']);
 });
+
+// アカウント削除
+Route::middleware('jwt.auth')->group(function(){
+    Route::patch('/me', [UserProfileController::class, 'update']);
+    Route::delete('/user', [UserProfileController::class, 'destroy']);
+});
