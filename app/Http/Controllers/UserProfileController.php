@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 // use App\Models\User;
 // use Firebase\JWT\JWT;
 // use Firebase\JWT\Key;
-// use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 use App\Http\Requests\UpdateProfileRequest;
 use Illuminate\Support\Facades\Hash;
 
@@ -47,7 +47,7 @@ class UserProfileController extends Controller
     {
         $user = $request->attributes->get('auth_user');
 
-        $this->userService->deleteUser($user);
+        $user->delete();
 
         return response()->json([
             'message' => 'User deleted successfully'
