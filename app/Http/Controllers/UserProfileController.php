@@ -40,4 +40,17 @@ class UserProfileController extends Controller
             'data' => $user
         ]);
     }
+
+
+    // アカウント削除
+    public function destroy(Request $request)
+    {
+        $user = $request->attributes->get('auth_user');
+
+        $this->userService->deleteUser($user);
+
+        return response()->json([
+            'message' => 'User deleted successfully'
+        ], 200);
+    }
 }
