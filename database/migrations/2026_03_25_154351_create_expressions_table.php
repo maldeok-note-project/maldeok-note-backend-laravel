@@ -20,13 +20,17 @@ return new class extends Migration
             ->constrained()
             ->cascadeOnDelete();
 
+            // どのカテゴリに属するか(削除制限つき)
+            $table->foreignId('speaker_category_id')
+            ->constrained()
+            ->restrictOnDelete();
+
             // 表現本体
             $table->string('phrase');
             $table->string('meaning');
             $table->string('memo')->nullable();
 
             // 誰が言ったか
-            $table->string('speaker_type');
             $table->string('speaker_name');
 
             // いつ・どこで聞いたか
