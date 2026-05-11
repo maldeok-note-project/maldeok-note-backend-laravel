@@ -18,7 +18,7 @@ class UserProfileController extends Controller
         $user = $request->attributes->get('auth_user');
 
         // 入力済みの内容取得
-        $validatedData = $request->get('auth_user');
+        $validatedData = $request->validated();
 
         // 変更内容があれば更新
         if (array_key_exists('name', $validatedData)) {
@@ -36,8 +36,8 @@ class UserProfileController extends Controller
         $user->save();
 
         return response()->json([
-            'message' => 'profile update ok',
-            'data' => $user
+            'message' => 'profile update successfully',
+            'data' => $user,
         ]);
     }
 
