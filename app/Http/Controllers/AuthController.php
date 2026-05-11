@@ -14,12 +14,11 @@ use Illuminate\Support\Facades\Hash;
 // 継承
 class AuthController extends Controller
 {
-
     // 会員登録
     public function register(Request $request)
     {
         // 入力チェック（バリデーション）
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
@@ -27,14 +26,14 @@ class AuthController extends Controller
 
         // userテーブルに新規ユーザー登録
         $user = User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
+                    'name' => $validatedData['name'],
+                    'email' => $validatedData['email'],
+                    'password' => $validatedData['password'],
                 ]);
 
         // 結果出力
         return response()->json([
-            'message' => 'register ok',
+            'message' => 'register successful',
             'data' => $user,
         ]);
     }
@@ -44,19 +43,19 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         // 入力チェック
-        $request->validate([
+        $validatedData = $request->validate([
             'email' => 'required|email',
             'password' => 'required|min:6',
         ]);
 
         // メールアドレスでアカウントを探す
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $validatedData['email'])->first();
 
         // 送られてきたパスワードとDBを照会
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!$user || !Hash::check($validatedData['password'], $user->password)) {
             // ログイン失敗
             return response()->json([
-                'message' => 'login fail'
+                'message' => 'login failed'
             ], 401);
         }
 
@@ -65,7 +64,7 @@ class AuthController extends Controller
 
         // ログイン成功
         return response()->json([
-            'message' => 'login ok',
+            'message' => 'login successful',
             'token' => $token,
         ]);
     }

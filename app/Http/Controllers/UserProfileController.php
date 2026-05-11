@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 // import
 use App\Http\Requests\UpdateProfileRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 
 // 継承
@@ -30,13 +29,13 @@ class UserProfileController extends Controller
         }
 
         if (array_key_exists('password', $validatedData)) {
-            $user->password = Hash::make($validatedData['password']);
+            $user->password = $validatedData['password'];
         }
         // 保存
         $user->save();
 
         return response()->json([
-            'message' => 'profile update successfully',
+            'message' => 'profile update successful',
             'data' => $user,
         ]);
     }
@@ -51,7 +50,7 @@ class UserProfileController extends Controller
         $user->delete();
         // 成功
         return response()->json([
-            'message' => 'User deleted successfully'
+            'message' => 'user deletion successful'
         ], 200);
     }
 }
