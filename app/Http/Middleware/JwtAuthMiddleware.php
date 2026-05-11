@@ -3,21 +3,16 @@
 namespace App\Http\Middleware;
 
 // import
-use App\Models\User;
 use App\Models\RevokedToken;
+use App\Models\User;
 use Closure;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Http\Request;
-// use Symfony\Component\HttpFoundation\Response;
+
 
 class JwtAuthMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  Closure(Request): (Response)  $next
-     */
     public function handle(Request $request, Closure $next)
     {
         // ヘッダーからトークン取得
@@ -29,17 +24,21 @@ class JwtAuthMiddleware
             ], 401);
         }
 
-        // revoked 確認
-        $revoked = RevokedToken::where('token', $token)->exists();
-        if ($revoked) {
-            return response()->json(['message' => 'token has been revoked'], 401);
+        // ログアウト済みトークンか確認
+        // revoked_tokens に保存されているトークンは使用不可
+        if (RevokedToken::where('token', $token)->exists()) {
+            return response()->json([
+                'message' => 'token has been revoked'
+            ], 401);
         }
 
-        // トークンの中身を確認
         try {
-            $decoded = JWT::decode($token, new Key(env('TOKEN_SECRET'), 'HS256'));
-            $userId = $decoded->sub;
-
+            // トークンの中身を確認
+            $decodedToken = JWT::decode($token, new Key(env('TOKEN_SECRET'), 'HS256'));
+            // トークン内の sub からユーザーIDを取得
+            $userId = $decodedToken->sub;
+        
+        // トークンが不正、または有効期限切れの場合
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'invalid token'
@@ -55,9 +54,10 @@ class JwtAuthMiddleware
             ], 404);
         }
 
+        // 後続のControllerやRequestでログイン中ユーザー/IDを使えるようにする
         $request->attributes->set('auth_user', $user);
         $request->attributes->set('auth_user_id', $userId);
-
+        // 次の処理
         return $next($request);
     }
 }
