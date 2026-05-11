@@ -2,29 +2,25 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
+// import
 use Illuminate\Foundation\Http\FormRequest;
 
+// 継承
 class UpdateProfileRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
+    // このリクエストを許可する
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
+    // 入力チェックのルール
     public function rules(): array
     {
+        // ログイン中ユーザーのIDを取得
         $userId = $this->attributes->get('auth_user_id');
 
-        // 条件
+        // 条件（送られてこなくてもOK）
         return [
             'name' => 'nullable|string|max:255',
             'email' => 'nullable|email|unique:users,email,' . $userId,
