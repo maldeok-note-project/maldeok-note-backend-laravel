@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 // import
 use App\Models\User;
+use App\Models\RevokedToken;
 use Closure;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -28,10 +29,17 @@ class JwtAuthMiddleware
             ], 401);
         }
 
+        // revoked 確認
+        $revoked = RevokedToken::where('token', $token)->exists();
+        if ($revoked) {
+            return response()->json(['message' => 'token has been revoked'], 401);
+        }
+
         // トークンの中身を確認
         try {
             $decoded = JWT::decode($token, new Key(env('TOKEN_SECRET'), 'HS256'));
             $userId = $decoded->sub;
+
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'invalid token'

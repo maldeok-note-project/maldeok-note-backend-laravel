@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 // import
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use App\Models\User;
+use App\Models\RevokedToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -79,5 +81,30 @@ class AuthController extends Controller{
             'message' => 'login ok',
             'token' => $token,
         ]);
+    }
+
+
+    // ログアウト
+    public function logout(Request $request)
+    {
+        // トークン確認
+        $token = $request->bearerToken();
+        // トークンが見つからないとき
+        if (!$token) {
+            return response()->json([
+                'message' => 'token not found'
+            ], 401);
+        }
+
+        $decoded = JWT::decode($token, new Key(env('TOKEN_SECRET'), 'HS256'));
+
+        RevokedToken::create([
+            'token' => $token,
+            'expires_at' => date('Y-m-d H:i:s', $decoded->exp),
+        ]);
+
+        return response()->json([
+            'message' => 'logout ok'
+        ], 200);
     }
 }
