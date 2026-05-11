@@ -23,7 +23,7 @@ Route::post('/login', [AuthController::class, 'login']);
 | 認証が必要なAPI
 |--------------------------------------------------------------------------
 */
-Route::middleware('jwt.auth')->group(function(){
+Route::middleware('jwt.auth')->group(function () {
     // ユーザー情報更新
     Route::patch('/me', [UserProfileController::class, 'update']);
     

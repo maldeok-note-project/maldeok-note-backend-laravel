@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 // import
+use App\Models\RevokedToken;
+use App\Models\User;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use App\Models\User;
-use App\Models\RevokedToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 // 継承
 class AuthController extends Controller{
 
-    // 新規会員
+    // 会員登録
     public function register(Request $request)
     {
         // 入力チェック（バリデーション）
@@ -59,22 +59,8 @@ class AuthController extends Controller{
             ], 401);
         }
 
-        // 現在時間
-        $now = time();
-        // トークンの有効時間
-        $ttl = (int) env('TOKEN_TTL', 60);
-
-        // トークンの中身
-        $payload = [
-            'sub' => $user->id,
-            'email' => $user->email,
-            'iat' => $now,
-            // 有効期限
-            'exp' => $now + ($ttl * 60),
-        ];
-
         // トークン作成
-         $token = JWT::encode($payload, env('TOKEN_SECRET'), 'HS256');
+        $token = $this->createToken($user);
 
         // ログイン成功
         return response()->json([
@@ -111,5 +97,24 @@ class AuthController extends Controller{
         return response()->json([
             'message' => 'logout ok'
         ], 200);
+    }
+
+    // JWTトークン作成
+    private function createToken(User $user)
+    {
+        // 現在時間
+        $now = time();
+        // トークンの有効時間
+        $ttl = (int) env('TOKEN_TTL', 60);
+
+        // トークンの中身
+        $payload = [
+            'sub' => $user->id,
+            'email' => $user->email,
+            'iat' => $now,
+            // 有効期限
+            'exp' => $now + ($ttl * 60),
+        ];
+        return JWT::encode($payload, env('TOKEN_SECRET'), 'HS256');
     }
 }
