@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class RevokedToken extends Model
 {
-    // 保存する項目のみ許可
+    // 登録・更新を許可するカラム
     protected $fillable = [
         'token',
         'expires_at',
