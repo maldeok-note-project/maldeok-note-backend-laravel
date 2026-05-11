@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Hash;
 
 
 // 継承
-class AuthController extends Controller{
+class AuthController extends Controller
+{
 
     // 会員登録
     public function register(Request $request)
