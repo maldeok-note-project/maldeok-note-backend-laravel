@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 // import
-// use App\Models\User;
-// use Firebase\JWT\JWT;
-// use Firebase\JWT\Key;
-use Illuminate\Http\Request;
 use App\Http\Requests\UpdateProfileRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -17,20 +14,23 @@ class UserProfileController extends Controller
     // ユーザー情報更新
     public function update(UpdateProfileRequest $request)
     {        
-        // 
+        // ログイン中のユーザー取得
         $user = $request->attributes->get('auth_user');
 
+        // 入力済みの内容取得
+        $validatedData = $request->get('auth_user');
+
         // 変更内容があれば更新
-        if ($request->filled('name')) {
-            $user->name = $request->name;
+        if (array_key_exists('name', $validatedData)) {
+            $user->name = $validatedData['name'];
         }
 
-        if ($request->filled('email')) {
-            $user->email = $request->email;
+        if (array_key_exists('email', $validatedData)) {
+            $user->email = $validatedData['email'];
         }
 
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
+        if (array_key_exists('password', $validatedData)) {
+            $user->password = Hash::make($validatedData['password']);
         }
         // 保存
         $user->save();
@@ -45,10 +45,11 @@ class UserProfileController extends Controller
     // アカウント削除
     public function destroy(Request $request)
     {
+        // ログイン中のユーザー取得
         $user = $request->attributes->get('auth_user');
-
+        // 削除
         $user->delete();
-
+        // 成功
         return response()->json([
             'message' => 'User deleted successfully'
         ], 200);
