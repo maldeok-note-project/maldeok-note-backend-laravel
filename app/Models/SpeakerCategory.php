@@ -6,9 +6,13 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\Expression;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SpeakerCategory extends Model
 {
+    // SoftDeletesトレイトを使う(論理削除を有効化)
+    use SoftDeletes;
+
     // 登録許可するカラム
     protected $fillable = [
         'user_id',
