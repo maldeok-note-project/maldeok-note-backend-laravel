@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // import
+use App\Models\Expression;
+use App\Models\SpeakerCategory;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -33,5 +35,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+
+    // ユーザーが登録した表現一覧
+    public function expressions()
+    {
+        // Laravelが自動で「users.id ← expressions.user_id」を繋いでくれる
+        return $this->hasMany(Expression::class);
+    }
+
+
+    // ユーザーが作成した話者カテゴリ一覧
+    public function speakerCategories()
+    {
+        // 「users.id ← speaker_categories.user_id」で自動連結
+        return $this->hasMany(SpeakerCategory::class);
     }
 }
