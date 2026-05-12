@@ -9,6 +9,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class Expression extends Model
 {
+    // 登録を許可するカラム
+    protected $fillable = [
+        'user_id',
+        'speaker_category_id',
+        'phrase',
+        'meaning',
+        'memo',
+        'speaker_name',
+        'heard_at',
+        'place',
+        'is_favorite',
+    ];
+
+    // カラムの変換
+    protected $casts = [
+        'heard_at' => 'date',
+        'is_favorite' => 'boolean',
+    ];
+
     // この表現を登録したユーザー
     public function user()
     {
