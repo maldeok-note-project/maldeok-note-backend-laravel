@@ -4,7 +4,7 @@ namespace App\Models;
 
 // import
 use App\Models\Expression;
-use App\Models\SpeakerCategories;
+use App\Models\SpeakerCategory;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -50,6 +50,6 @@ class User extends Authenticatable
     public function speakerCategories()
     {
         // 「users.id ← speaker_categories.user_id」で自動連結
-        return $this->hasMany(SpeakerCategories::class);
+        return $this->hasMany(SpeakerCategory::class);
     }
 }
