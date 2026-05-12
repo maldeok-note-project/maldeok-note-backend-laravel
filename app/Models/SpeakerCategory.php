@@ -9,6 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class SpeakerCategory extends Model
 {
+    // 登録許可するカラム
+    protected $fillable = [
+        'user_id',
+        'name',
+    ];
+
     // カテゴリを作成したユーザー
     public function user()
     {
