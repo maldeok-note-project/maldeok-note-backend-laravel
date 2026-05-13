@@ -3,6 +3,7 @@
 // import
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\SpeakerCategoryController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -32,4 +33,13 @@ Route::middleware('jwt.auth')->group(function () {
     
     // ログアウト
     Route::post('/logout', [AuthController::class, 'logout']);
+
+
+        /*
+    |--------------------------------------------------------------------------
+    | 話者カテゴリ API
+    |--------------------------------------------------------------------------
+    */
+    // カテゴリ作成
+    Route::post('/speaker-categories', [SpeakerCategoryController::class, 'store']);
 });
