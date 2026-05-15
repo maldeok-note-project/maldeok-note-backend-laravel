@@ -47,5 +47,5 @@ Route::middleware('jwt.auth')->group(function () {
     Route::get('/speaker-categories', [SpeakerCategoryController::class, 'index']);
 
     // カテゴリ編集
-    Route::patch('/speaker-categories/{id}', [SpeakerCategoryController::class, 'update'])
+    Route::patch('/speaker-categories/{id}', [SpeakerCategoryController::class, 'update']);
 });
