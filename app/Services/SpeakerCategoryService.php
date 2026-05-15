@@ -5,7 +5,7 @@ namespace App\Services;
 // import
 use App\Models\SpeakerCategory;
 use App\Models\User;
-use Ramsey\Collection\Collection;
+use Illuminate\Database\Eloquent\Collection;
 
 // ontrollerから呼び出され、DB操作や業務ルールの処理を行う
 class SpeakerCategoryService{
