@@ -35,11 +35,14 @@ Route::middleware('jwt.auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | 話者カテゴリ API
-    |--------------------------------------------------------------------------
-    */
+/*
+|--------------------------------------------------------------------------
+| 話者カテゴリ API
+|--------------------------------------------------------------------------
+*/
     // カテゴリ作成
     Route::post('/speaker-categories', [SpeakerCategoryController::class, 'store']);
+
+    // カテゴリ一覧
+    Route::get('/speaker-categories', SpeakerCategoryController::class, 'index')
 });
