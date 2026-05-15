@@ -5,7 +5,7 @@ namespace App\Services;
 // import
 use App\Models\SpeakerCategory;
 use App\Models\User;
-
+use Illuminate\Database\Eloquent\Collection;
 
 // ontrollerから呼び出され、DB操作や業務ルールの処理を行う
 class SpeakerCategoryService{
@@ -27,6 +27,19 @@ class SpeakerCategoryService{
         return $user->speakerCategories()->create([
             'name' => $name,
         ]);
+    }
 
+
+    // カテゴリ一覧取得
+    // Collection: ララベル専用配列
+    public function list(User $user): Collection
+    {
+        // ユーザーのカテゴリを新規順で取得
+        // User経由で自動的にuser_idに絞り込む
+        return $user->speakerCategories()
+        // oderBy: 並び替え
+        // desc: 降順
+        ->orderBy('created_at', 'desc')
+        ->get();    
     }
 }

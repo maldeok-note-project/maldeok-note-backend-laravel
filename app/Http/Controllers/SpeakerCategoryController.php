@@ -58,4 +58,20 @@ class SpeakerCategoryController extends Controller
         ], 201);
     }
 
+
+    // カテゴリ一覧
+    public function index(Request $request): JsonResponse
+    {
+        // JWT認証で取得した「ログイン中のユーザー」
+        $user = $request->attributes->get('auth_user');
+
+        // Service経由でカテゴリ取得
+        $categories = $this->service->list($user);
+
+        // 成功レスポンス
+        return response()->json([
+            'message' => 'カテゴリ一覧を取得しました。',
+            'data' => $categories,
+        ], 200);
+    }
 }
