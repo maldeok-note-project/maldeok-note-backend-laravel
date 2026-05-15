@@ -58,4 +58,10 @@ class SpeakerCategoryController extends Controller
         ], 201);
     }
 
+
+    // カテゴリ一覧
+    public function index(Request $request): JsonResponse
+    {
+        
+    }
 }
