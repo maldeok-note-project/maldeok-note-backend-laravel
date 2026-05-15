@@ -42,4 +42,31 @@ class SpeakerCategoryService{
         ->orderBy('created_at', 'desc')
         ->get();    
     }
+
+
+    // カテゴリ更新
+    public function update(User $user, int $categoryId, string $name): SpeakerCategory
+    {
+        // カテゴリの中からIDを探す
+        $category = $user->speakerCategories()->findOrFail($categoryId);
+
+        // 自分以外の重複確認
+        $duplicate = SpeakerCategory::where('user_id', $user->id)
+        ->where('name', $name)
+        ->where('id', '!=', $categoryId) //自分以外
+        ->exists();
+
+        // 重複があればエラー
+        if($duplicate){
+            throw new \DomainException('このカテゴリ名は既に登録されています。');
+        }
+
+        // 無ければ更新
+        $category->update([
+            'name' => $name,
+        ]);
+
+        // 更新済み内容を返す
+        return $category;
+    }
 }
