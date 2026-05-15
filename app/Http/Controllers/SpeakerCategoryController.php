@@ -36,10 +36,12 @@ class SpeakerCategoryController extends Controller
         ]);
 
         // Serviceカテゴリ作成
+        $user = $request->attributes->get('auth_user');
+
         try{
             // JWT認証で取得した「ログイン中のユーザー」
             $category = $this->service->create(
-                $request->user(),
+                $user,
                 $validated['name']
             );
         // 重複時はDomainException
