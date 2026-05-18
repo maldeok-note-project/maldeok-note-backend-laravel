@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 // import
+use App\Models\Expression;
+use App\Models\SpeakerCategory;
 use App\Services\SpeakerCategoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -109,5 +111,37 @@ class SpeakerCategoryController extends Controller
             'message' => 'カテゴリを更新しました。',
         ], 200);
     }
+
+
+    // カテゴリ削除
+    public function destroy(Request $request, SpeakerCategory $speakerCategory)
+    {
+        // JWT認証取得ログインユーザー
+        $user = $request->attributes->get('auth_user');
+
+        // ハッキング確認
+        if($speakerCategory->user_id != $user->id){
+            return response()->json([
+                'message' => 'このカテゴリを削除する権限がありません。',
+            ], 403);
+        }
+
+        //　カテゴリ使用確認
+        $usedCount = Expression::where('speaker_category_id', $speakerCategory->id)->couny();
+        if($usedCount > 0){
+            return response()->json([
+                'message' => 'このカテゴリは {$usedCount}件の表現で使われているため削除できません。',
+                'used_count' => $usedCount,
+            ], 409);
+        }
+
+        // ソフトデリート
+        $speakerCategory->delete();
+
+        // 成功レスポンス
+        return response()->json([
+            'message' => 'カテゴリを削除しました。',
+        ], 200);
+    } 
     
 }
