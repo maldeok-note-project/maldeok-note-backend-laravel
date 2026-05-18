@@ -114,29 +114,19 @@ class SpeakerCategoryController extends Controller
 
 
     // カテゴリ削除
-    public function destroy(Request $request, SpeakerCategory $speakerCategory)
+    public function destroy(Request $request, int $id)
     {
         // JWT認証取得ログインユーザー
         $user = $request->attributes->get('auth_user');
 
-        // ハッキング確認
-        if($speakerCategory->user_id != $user->id){
+        // Serviceに受け渡す
+        try{
+            $this->service->delete($user, $id);
+        } catch (\DomainException $e) {
             return response()->json([
-                'message' => 'このカテゴリを削除する権限がありません。',
-            ], 403);
-        }
-
-        //　カテゴリ使用確認
-        $usedCount = Expression::where('speaker_category_id', $speakerCategory->id)->couny();
-        if($usedCount > 0){
-            return response()->json([
-                'message' => 'このカテゴリは {$usedCount}件の表現で使われているため削除できません。',
-                'used_count' => $usedCount,
+                'message' => $e->getMessage()
             ], 409);
         }
-
-        // ソフトデリート
-        $speakerCategory->delete();
 
         // 成功レスポンス
         return response()->json([
