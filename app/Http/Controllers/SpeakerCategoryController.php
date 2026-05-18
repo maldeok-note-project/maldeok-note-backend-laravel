@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 // import
-use App\Models\Expression;
-use App\Models\SpeakerCategory;
 use App\Services\SpeakerCategoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
