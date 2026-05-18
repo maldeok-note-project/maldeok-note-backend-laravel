@@ -74,4 +74,40 @@ class SpeakerCategoryController extends Controller
             'data' => $categories,
         ], 200);
     }
+
+
+    // カテゴリ編集
+    public function update(Request $request, int $id): JsonResponse
+    {
+        // バリデーションチェック
+        $validated = $request->validate([
+            'name' => 'required|string|max:50',
+        ], [
+            'name.required' => '入力は必須です。',
+            'name.string' => 'カテゴリ名は文字列で入力してください。'
+        ]);
+
+        // JWT認証取得ログインユーザー
+        $user = $request->attributes->get('auth_user');
+
+        // Service経由でカテゴリ編集
+        try{
+            $category = $this->service->update(
+                $user,
+                $id,
+                $validated['name']
+            );
+        // 重複時エラー
+        } catch(\DomainException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 409);
+        }
+
+        // 成功レスポンス
+        return response()->json([
+            'message' => 'カテゴリを更新しました。',
+        ], 200);
+    }
+    
 }
