@@ -109,5 +109,27 @@ class SpeakerCategoryController extends Controller
             'message' => 'カテゴリを更新しました。',
         ], 200);
     }
+
+
+    // カテゴリ削除
+    public function destroy(Request $request, int $id): JsonResponse
+    {
+        // JWT認証取得ログインユーザー
+        $user = $request->attributes->get('auth_user');
+
+        // Serviceに受け渡す
+        try{
+            $this->service->delete($user, $id);
+        } catch (\DomainException $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 409);
+        }
+
+        // 成功レスポンス
+        return response()->json([
+            'message' => 'カテゴリを削除しました。',
+        ], 200);
+    } 
     
 }

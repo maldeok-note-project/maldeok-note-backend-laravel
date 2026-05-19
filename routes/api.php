@@ -48,4 +48,7 @@ Route::middleware('jwt.auth')->group(function () {
 
     // カテゴリ編集
     Route::patch('/speaker-categories/{id}', [SpeakerCategoryController::class, 'update']);
+
+    // カテゴリ削除
+    Route::delete('/speaker-categories/{id}', [SpeakerCategoryController::class, 'destroy']);
 });

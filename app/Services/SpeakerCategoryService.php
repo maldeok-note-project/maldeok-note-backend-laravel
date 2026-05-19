@@ -3,6 +3,7 @@
 namespace App\Services;
 
 // import
+use App\Models\Expression;
 use App\Models\SpeakerCategory;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -68,5 +69,24 @@ class SpeakerCategoryService{
 
         // 更新済み内容を返す
         return $category;
+    }
+
+
+    // カテゴリ削除
+    public function delete(User $user, int $categoryId): void
+    {
+        // カテゴリの中からIDを探す
+        $category = $user->speakerCategories()->findOrFail($categoryId);
+
+        // カテゴリ使用確認
+        $usedCount = Expression::where('speaker_category_id', $category->id)->count();
+
+        // 使用中の場合はエラー
+        if ($usedCount > 0){
+            throw new \DomainException("このカテゴリは、{$usedCount}件の表現で使用されているため削除できません。");
+        }
+
+        // 0の場合ソフトデリート
+        $category->delete();
     }
 }
