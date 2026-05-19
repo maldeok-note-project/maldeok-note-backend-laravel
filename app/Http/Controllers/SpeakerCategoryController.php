@@ -112,7 +112,7 @@ class SpeakerCategoryController extends Controller
 
 
     // カテゴリ削除
-    public function destroy(Request $request, int $id)
+    public function destroy(Request $request, int $id): JsonResponse
     {
         // JWT認証取得ログインユーザー
         $user = $request->attributes->get('auth_user');
