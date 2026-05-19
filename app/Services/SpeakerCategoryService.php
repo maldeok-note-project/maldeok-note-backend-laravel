@@ -76,7 +76,7 @@ class SpeakerCategoryService{
     public function delete(User $user, int $categoryId): void
     {
         // カテゴリの中からIDを探す
-        $category = $user->speakerCategories()->findOrNew($categoryId);
+        $category = $user->speakerCategories()->findOrFail($categoryId);
 
         // カテゴリ使用確認
         $usedCount = Expression::where('speaker_category_id', $category->id)->count();
