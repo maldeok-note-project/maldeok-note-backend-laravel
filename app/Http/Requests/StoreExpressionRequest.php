@@ -23,7 +23,7 @@ class StoreExpressionRequest extends FormRequest
         return [
             'phrase' => 'required|string|max:255',
             'meaning'             => 'required|string|max:255',
-            'speaker_category_id' => 'required|integer|exists:speaker_categories,id',
+            'speaker_category_id' => 'required|integer',
             'speaker_name'        => 'required|string|max:100',
             'heard_at'            => 'required|date',
             'memo'                => 'nullable|string|max:1000',
@@ -48,8 +48,7 @@ class StoreExpressionRequest extends FormRequest
 
             'speaker_category_id.required' => 'カテゴリは必須です。',
             'speaker_category_id.integer'  => 'カテゴリIDは数値で指定してください。',
-            'speaker_category_id.exists'   => '指定されたカテゴリは存在しません。',
-
+            
             'speaker_name.required' => '名前は必須です。',
             'speaker_name.string'   => '名前は文字列で入力してください。',
             'speaker_name.max'      => '名前は100文字以内で入力してください。',
