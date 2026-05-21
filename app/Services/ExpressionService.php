@@ -12,8 +12,15 @@ class ExpressionService
     // 表現作成
     public function create(User $user, array $data): Expression
     {
-        // 自分のID以外なら、findOrFailが自動で404を投げる
-        $user->speakerCategories()->findOrFail($data['speaker_category_id']);
+        // 自分のカテゴリか確認
+        $exists = $user->speakerCategories()
+        ->where('id', $data['speaker_category_id'])
+        ->exists();
+
+        // 自分以外はエラー
+        if(!$exists){
+            throw new \DomainException('指定されたカテゴリは使用できません。');
+        }
 
         // User経由で作成
         return $user->expressions()->create($data);
