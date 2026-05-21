@@ -2,6 +2,7 @@
 
 // import
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ExpressionController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\SpeakerCategoryController;
 use Illuminate\Support\Facades\Route;
@@ -51,4 +52,15 @@ Route::middleware('jwt.auth')->group(function () {
 
     // カテゴリ削除
     Route::delete('/speaker-categories/{id}', [SpeakerCategoryController::class, 'destroy']);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CURD API
+    |--------------------------------------------------------------------------
+    */
+    // 表現作成
+    Route::post('/expressions', [ExpressionController::class, 'store']);
+
+
 });
