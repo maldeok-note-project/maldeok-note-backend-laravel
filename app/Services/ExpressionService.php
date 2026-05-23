@@ -45,6 +45,6 @@ class ExpressionService
         // 自分の表現だけ
         return $user->expressions()
         ->with('speakerCategory') // カテゴリも取得
-        ->findorFail($id); // 見つからなければエラー
+        ->findOrFail($id); // 見つからなければエラー
     }
 }
