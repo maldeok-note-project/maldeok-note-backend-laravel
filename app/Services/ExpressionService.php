@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Expression;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
-use LengthException;
+
 
 // Controllerから呼び出されて、DB操作・業務ルールの処理
 class ExpressionService
@@ -36,5 +36,15 @@ class ExpressionService
         ->with('speakerCategory') // カテゴリも取得
         ->latest() // 新しい順
         ->paginate(20); // １ページ２０件
+    }
+
+
+    // 表現詳細
+    public function show(User $user, int $id): Expression
+    {
+        // 自分の表現だけ
+        return $user->expressions()
+        ->with('speakerCategory') // カテゴリも取得
+        ->findOrFail($id); // 見つからなければエラー
     }
 }

@@ -64,9 +64,17 @@ class ExpressionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, int $id): JsonResponse
     {
-        //
+        //JWT認証/ログイン中ユーザー
+        $user = $request->attributes->get('auth_user');
+
+        // Service経由で表現詳細取得
+        // 自分以外エラー
+        $expression = $this->service->show($user, $id);
+
+        // 成功レスポンス
+        return response()->json($expression);
     }
 
     /**
