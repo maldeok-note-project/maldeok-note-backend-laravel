@@ -37,4 +37,14 @@ class ExpressionService
         ->latest() // 新しい順
         ->paginate(20); // １ページ２０件
     }
+
+
+    // 表現詳細
+    public function show(User $user, int $id): Expression
+    {
+        // 自分の表現だけ
+        return $user->expressions()
+        ->with('speakerCategory') // カテゴリも取得
+        ->findorFail($id); // 見つからなければエラー
+    }
 }
