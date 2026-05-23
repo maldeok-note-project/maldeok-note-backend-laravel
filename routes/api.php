@@ -65,4 +65,7 @@ Route::middleware('jwt.auth')->group(function () {
     // 表現一覧
     Route::get('expressions', [ExpressionController::class, 'index']); 
 
+    // 表現詳細
+    Route::get('expressions/{id}', [ExpressionController::class, 'show'])
+        ->whereNumber('id');
 });
