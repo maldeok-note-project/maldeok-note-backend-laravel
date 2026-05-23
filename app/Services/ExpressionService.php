@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Expression;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
-use LengthException;
+
 
 // Controllerから呼び出されて、DB操作・業務ルールの処理
 class ExpressionService
