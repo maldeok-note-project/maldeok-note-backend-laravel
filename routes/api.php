@@ -56,11 +56,13 @@ Route::middleware('jwt.auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | CURD API
+    | CRUD API
     |--------------------------------------------------------------------------
     */
     // 表現作成
     Route::post('/expressions', [ExpressionController::class, 'store']);
-
+    
+    // 表現一覧
+    Route::get('expressions', [ExpressionController::class, 'index']); 
 
 });
