@@ -22,9 +22,16 @@ class ExpressionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        // JWT認証/ログイン中ユーザー
+        $user = $request->attributes->get('auth_user');
+
+        // Service経由で一覧取得
+        $expressions = $this->service->getAll($user);
+
+        // 成功レスポンス
+        return response()->json($expressions);
     }
 
     /**
