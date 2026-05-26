@@ -47,4 +47,29 @@ class ExpressionService
         ->with('speakerCategory') // カテゴリも取得
         ->findOrFail($id); // 見つからなければエラー
     }
+
+
+    // 表現編集
+    public function update(User $user, int $id, array $data): Expression
+    {
+        // 所有権確認
+        $expression = $user->expressions()->findOrFail($id);
+
+        // 変更部分があれば、カテゴリ所有権確認
+        if(isset($data['speaker_category_id'])){
+            // 自分のカテゴリのみ更新可
+            $exists = $user->speakerCategories()
+            ->where('id', $data['speaker_category_id'])
+            ->exists();
+        }
+
+        // 自分以外はエラー
+        if(!$exists){
+            throw new \DomainException('指定されたカテゴリは使用できません。');
+        }
+
+        // 更新
+        $expression->update($data);
+        return $expression;
+    }
 }
