@@ -61,15 +61,15 @@ class ExpressionService
             $exists = $user->speakerCategories()
             ->where('id', $data['speaker_category_id'])
             ->exists();
-        }
 
-        // 自分以外はエラー
-        if(!$exists){
-            throw new \DomainException('指定されたカテゴリは使用できません。');
+            // 自分以外はエラー
+            if(!$exists){
+                throw new \DomainException('指定されたカテゴリは使用できません。');
+            }
         }
 
         // 更新
         $expression->update($data);
-        return $expression;
+        return $expression->load('speakerCategory');
     }
 }
