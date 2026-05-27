@@ -5,10 +5,14 @@ namespace App\Models;
 // import
 use App\Models\User;
 use App\Models\SpeakerCategory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Expression extends Model
 {
+    use HasFactory, SoftDeletes;
+
     // 登録を許可するカラム
     protected $fillable = [
         'user_id',
