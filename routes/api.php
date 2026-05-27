@@ -1,6 +1,5 @@
 <?php
 
-// import
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExpressionController;
 use App\Http\Controllers\UserProfileController;
@@ -71,5 +70,9 @@ Route::middleware('jwt.auth')->group(function () {
 
     // 表現編集
     Route::patch('expressions/{id}', [ExpressionController::class, 'update'])
+        ->whereNumber('id');
+
+    // 表現削除
+    Route::delete('expressions/{id}', [ExpressionController::class, 'destroy'])
         ->whereNumber('id');
 });

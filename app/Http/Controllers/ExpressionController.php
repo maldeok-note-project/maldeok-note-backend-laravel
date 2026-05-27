@@ -8,6 +8,7 @@ use App\Services\ExpressionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+
 class ExpressionController extends Controller
 {
     // インスタンス保持
@@ -20,9 +21,8 @@ class ExpressionController extends Controller
         $this->service = $service;
     }
 
-    /**
-     * Display a listing of the resource.
-     */
+    
+    // 表現一覧
     public function index(Request $request)
     {
         // JWT認証/ログイン中ユーザー
@@ -35,9 +35,8 @@ class ExpressionController extends Controller
         return response()->json($expressions);
     }
 
-    /**
-     * 表現作成
-     */
+
+    // 表現作成
     public function store(StoreExpressionRequest $request): JsonResponse
     {
         // バリデーションデータ取得
@@ -62,9 +61,8 @@ class ExpressionController extends Controller
         ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
+
+    // 表現詳細
     public function show(Request $request, int $id): JsonResponse
     {
         //JWT認証/ログイン中ユーザー
@@ -78,9 +76,8 @@ class ExpressionController extends Controller
         return response()->json($expression);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
+    // 表現編集
     public function update(UpdateExpressionRequest $request, int $id): JsonResponse
     {
         // バリデーションデータ取得
@@ -105,11 +102,20 @@ class ExpressionController extends Controller
         ], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+
+    // 表現削除
+    public function destroy(Request $request, int $id): JsonResponse
     {
-        //
+        // JWT認証/ログイン中ユーザー
+        $user = $request->attributes->get('auth_user');
+
+        // Service層で削除処理を実行
+        $deletedExpression = $this->service->delete($user, $id);
+
+        // 成功レスポンス
+        return response()->json([
+            'message' => '表現を削除しました。',
+            'data' => $deletedExpression,
+        ], 200);
     }
 }

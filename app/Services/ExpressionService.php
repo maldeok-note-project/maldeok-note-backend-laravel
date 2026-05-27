@@ -72,4 +72,18 @@ class ExpressionService
         $expression->update($data);
         return $expression->load('speakerCategory');
     }
+
+
+    // 表現削除
+    public function delete(User $user, int $id): Expression
+    {
+        // ユーザー所有の、未削除の表現を取得
+        $expression = $user->expressions()->findOrFail($id);
+
+        // 論理削除を実行
+        $expression->delete();
+
+        // 削除した表現を返す
+        return $expression;
+    }
 }
