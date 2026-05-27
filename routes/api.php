@@ -72,4 +72,8 @@ Route::middleware('jwt.auth')->group(function () {
     // 表現編集
     Route::patch('expressions/{id}', [ExpressionController::class, 'update'])
         ->whereNumber('id');
+
+    // 表現削除
+    Route::delete('expression/{id}', ExpressionController::class, 'destroy')
+        ->whereNumber('id');
 });
