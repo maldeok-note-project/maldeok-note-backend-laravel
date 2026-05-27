@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreExpressionRequest;
+use App\Http\Requests\UpdateExpressionRequest;
 use App\Services\ExpressionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -80,9 +81,28 @@ class ExpressionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateExpressionRequest $request, int $id): JsonResponse
     {
-        //
+        // バリデーションデータ取得
+        $validated = $request->validated();
+
+        // JWT認証/ログイン中ユーザー
+        $user = $request->attributes->get('auth_user');
+
+        // Service経由で表現更新
+        try {
+            $expression = $this->service->update($user, $id, $validated);
+        } catch (\DomainException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 404);
+        }
+
+        // 成功レスポンス
+        return response()->json([
+            'message' => '表現を更新しました。',
+            'data' => $expression,
+        ], 200);
     }
 
     /**
