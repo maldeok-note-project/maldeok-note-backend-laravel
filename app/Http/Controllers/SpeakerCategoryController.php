@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-// import
+use App\Http\Requests\StoreSpeakerCategoryRequest;
+use App\Http\Requests\UpdateSpeakerCategoryRequest;
 use App\Services\SpeakerCategoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-// 継承
+
 // 話者カテゴリController
 class SpeakerCategoryController extends Controller
 {
@@ -24,22 +25,16 @@ class SpeakerCategoryController extends Controller
 
 
     // 新規作成
-    public function store(Request $request): JsonResponse
+    public function store(StoreSpeakerCategoryRequest $request): JsonResponse
     {
-        // バリデーションチェック
-        $validated = $request->validate([
-            'name' => 'required|string|max:50',
-        ], [
-            'name.required' => '入力は必須です。',
-            'name.string' => 'カテゴリ名は文字列で入力してください。',
-            'name.max' => 'カテゴリ名は50文字以内で入力してください',
-        ]);
+        // バリデーション確認
+        $validated = $request->validated();
 
-        // Serviceカテゴリ作成
+        // JWT認証で取得した「ログイン中のユーザー」
         $user = $request->attributes->get('auth_user');
 
         try{
-            // JWT認証で取得した「ログイン中のユーザー」
+            // Service経由でカテゴリ作成
             $category = $this->service->create(
                 $user,
                 $validated['name']
@@ -77,15 +72,10 @@ class SpeakerCategoryController extends Controller
 
 
     // カテゴリ編集
-    public function update(Request $request, int $id): JsonResponse
+    public function update(UpdateSpeakerCategoryRequest $request, int $id): JsonResponse
     {
-        // バリデーションチェック
-        $validated = $request->validate([
-            'name' => 'required|string|max:50',
-        ], [
-            'name.required' => '入力は必須です。',
-            'name.string' => 'カテゴリ名は文字列で入力してください。'
-        ]);
+        // バリデーション確認
+        $validated = $request->validated();
 
         // JWT認証取得ログインユーザー
         $user = $request->attributes->get('auth_user');
