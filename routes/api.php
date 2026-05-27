@@ -73,6 +73,6 @@ Route::middleware('jwt.auth')->group(function () {
         ->whereNumber('id');
 
     // 表現削除
-    Route::delete('expression/{id}', [ExpressionController::class, 'destroy'])
+    Route::delete('expressions/{id}', [ExpressionController::class, 'destroy'])
         ->whereNumber('id');
 });
