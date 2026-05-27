@@ -2,28 +2,33 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateSpeakerCategoryRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
+    // 権限確認
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
+
+    // バリデーションルール
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:50',
+        ];
+    }
+
+
+    // エラーメッセージ
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'カテゴリ名は必須です。',
+            'name.string' => 'カテゴリ名は文字列で入力してください。',
+            'name.max' => 'カテゴリ名は50文字以内で入力してください。',
         ];
     }
 }
