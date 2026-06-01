@@ -23,7 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // findOrFailで見つからないとき(404)のレスポンスを日本語統一
         $exceptions->render(function(ModelNotFoundException $e, Request $request){
             return response()->json([
-                'massage' => 'リソースが見つかりませんでした。',
+                'message' => 'リソースが見つかりませんでした。',
             ], 404);
         });
     })->create();
