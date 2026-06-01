@@ -86,4 +86,20 @@ class ExpressionService
         // 削除した表現を返す
         return $expression;
     }
+
+
+    // お気に入り
+    public function toggleFavorite(User $user, int $id): Expression
+    {
+        // 自分の表現だけ取得(無ければ404)
+        $expression = $user->expressions()->findOrFail($id);
+
+        // is_favorite を反転して保存(お気に入り前)
+        $expression->update([
+            'is_favorite' => !$expression->is_favorite,
+        ]);
+
+        // カテゴリ含めレスポンス
+        return $expression->load('speakerCategory');
+    }
 }
