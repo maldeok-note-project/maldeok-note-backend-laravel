@@ -20,8 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        // API->json
+        $exceptions->shouldRenderJsonWhen(fn() => true);
         // findOrFailで見つからないとき(404)のレスポンスを日本語統一
-        $exceptions->render(function(ModelNotFoundException $e, Request $request){
+        $exceptions->render(function(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, Request $request){    
             return response()->json([
                 'message' => 'リソースが見つかりませんでした。',
             ], 404);
