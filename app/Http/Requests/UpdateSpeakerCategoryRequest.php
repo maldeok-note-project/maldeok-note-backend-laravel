@@ -20,15 +20,4 @@ class UpdateSpeakerCategoryRequest extends FormRequest
             'name' => 'required|string|max:50',
         ];
     }
-
-
-    // エラーメッセージ
-    public function messages(): array
-    {
-        return [
-            'name.required' => 'カテゴリ名は必須です。',
-            'name.string' => 'カテゴリ名は文字列で入力してください。',
-            'name.max' => 'カテゴリ名は50文字以内で入力してください。',
-        ];
-    }
 }
