@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,5 +20,12 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // API->json
+        $exceptions->shouldRenderJsonWhen(fn() => true);
+        // findOrFailで見つからないとき(404)のレスポンスを日本語統一
+        $exceptions->render(function(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, Request $request){    
+            return response()->json([
+                'message' => 'リソースが見つかりませんでした。',
+            ], 404);
+        });
     })->create();
