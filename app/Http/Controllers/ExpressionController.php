@@ -118,4 +118,21 @@ class ExpressionController extends Controller
             'data' => $deletedExpression,
         ], 200);
     }
+
+
+    // お気に入り
+    public function toggleFavorite(Request $request, int $id): JsonResponse
+    {
+        // JWT認証/ログイン中ユーザー
+        $user = $request->attributes->get('auth_user');
+
+        // Server経由でトグル処理
+        $expression = $this->service->toggleFavorite($user, $id);
+
+        // 成功レスポンス
+        return response()->json([
+            'message' => 'お気に入りを更新しました。',
+            'data' => $expression,
+        ], 200);
+    }
 }
