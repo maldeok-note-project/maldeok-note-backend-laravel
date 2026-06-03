@@ -75,4 +75,13 @@ Route::middleware('jwt.auth')->group(function () {
     // 表現削除
     Route::delete('expressions/{id}', [ExpressionController::class, 'destroy'])
         ->whereNumber('id');
+
+    
+    /*
+    |--------------------------------------------------------------------------
+    | お気に入り
+    |--------------------------------------------------------------------------
+    */
+    Route::patch('/expressions/{id}/favorite', [ExpressionController::class, 'toggleFavorite'])
+        ->whereNumber('id');
 });
