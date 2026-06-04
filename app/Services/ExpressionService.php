@@ -39,7 +39,7 @@ class ExpressionService
         // searchがあれば絞り込み
         if($search !== null){
             $query->where(function ($q) use ($search){
-                $q->where('prase', 'like', "%{$search}%")
+                $q->where('phrase', 'like', "%{$search}%")
                 ->orWhere('meaning', 'like', "%{$search}%");
             });
         }
