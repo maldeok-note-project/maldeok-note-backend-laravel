@@ -31,11 +31,21 @@ class ExpressionService
     // 表現一覧
     public function getAll(User $user, ?string $search = null): LengthAwarePaginator
     {
-        // 自分の表示だけ
-        return $user->expressions()
-        ->with('speakerCategory') // カテゴリも取得
-        ->latest() // 新しい順
-        ->paginate(20); // １ページ２０件
+        // クエリ作成
+        $query = $user->expressions()
+        ->with('speakerCategory') //カテゴリ取得
+        ->latest(); // 新しい順
+
+        // searchがあれば絞り込み
+        if($search !== null){
+            $query->where(function ($q) use ($search){
+                $q->where('prase', 'like', "%{$search}%")
+                ->orWhere('meaning', 'like', "%{$search}%");
+            });
+        }
+
+        // 1ページの件数
+        return $query->paginate(20);
     }
 
 
