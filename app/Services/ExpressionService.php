@@ -29,7 +29,7 @@ class ExpressionService
 
 
     // 表現一覧
-    public function getAll(User $user): LengthAwarePaginator
+    public function getAll(User $user, ?string $serach = null): LengthAwarePaginator
     {
         // 自分の表示だけ
         return $user->expressions()
