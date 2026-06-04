@@ -29,8 +29,12 @@ class ExpressionController extends Controller
         $user = $request->attributes->get('auth_user');
         $search = $request->query('search');
 
+        // speaker_category_idが来たらintに変換
+        $speakerCategoryId = $request->query('speaker_category_id')
+            ?(int)$request->query('speaker_category_id'): null;
+
         // Service経由で一覧取得
-        $expressions = $this->service->getAll($user, $search);
+        $expressions = $this->service->getAll($user, $search, $speakerCategoryId);
 
         // 成功レスポンス
         return response()->json($expressions);
