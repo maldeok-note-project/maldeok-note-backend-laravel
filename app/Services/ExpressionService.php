@@ -29,7 +29,7 @@ class ExpressionService
 
 
     // 表現一覧
-    public function getAll(User $user, ?string $search = null): LengthAwarePaginator
+    public function getAll(User $user, ?string $search = null, ?int $speakerCategoryId = null): LengthAwarePaginator
     {
         // クエリ作成
         $query = $user->expressions()
@@ -42,6 +42,11 @@ class ExpressionService
                 $q->where('phrase', 'like', "%{$search}%")
                 ->orWhere('meaning', 'like', "%{$search}%");
             });
+        }
+
+        // 話者絞り込み
+        if($speakerCategoryId !== null){
+            $query->where('speaker_category_id', $speakerCategoryId);
         }
 
         // 1ページの件数
