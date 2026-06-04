@@ -27,9 +27,10 @@ class ExpressionController extends Controller
     {
         // JWT認証/ログイン中ユーザー
         $user = $request->attributes->get('auth_user');
+        $search = $request->query('search');
 
         // Service経由で一覧取得
-        $expressions = $this->service->getAll($user);
+        $expressions = $this->service->getAll($user, $search);
 
         // 成功レスポンス
         return response()->json($expressions);
