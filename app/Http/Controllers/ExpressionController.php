@@ -33,8 +33,11 @@ class ExpressionController extends Controller
         $speakerCategoryId = $request->query('speaker_category_id')
             ?(int)$request->query('speaker_category_id'): null;
 
+        // sortパラメータ取得
+        $sort = $request->query('sort', 'newest'); 
+
         // Service経由で一覧取得
-        $expressions = $this->service->getAll($user, $search, $speakerCategoryId);
+        $expressions = $this->service->getAll($user, $search, $speakerCategoryId, $sort);
 
         // 成功レスポンス
         return response()->json($expressions);
