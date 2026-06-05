@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-// import
+use App\Models\Badge;
 use App\Models\Expression;
 use App\Models\SpeakerCategory;
+use App\Models\UserBadge;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -51,5 +52,19 @@ class User extends Authenticatable
     {
         // 「users.id ← speaker_categories.user_id」で自動連結
         return $this->hasMany(SpeakerCategory::class);
+    }
+
+
+    // バッジの獲得履歴
+    public function userBadges()
+    {
+        return $this->hasMany(UserBadge::class);
+    }
+
+
+    // 獲得バッジ一覧
+    public function badges()
+    {
+        return $this->hasManyThrough(Badge::class, UserBadge::class);
     }
 }
