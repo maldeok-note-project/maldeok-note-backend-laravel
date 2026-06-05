@@ -33,7 +33,8 @@ class ExpressionService
         User $user, 
         ?string $search = null, 
         ?int $speakerCategoryId = null,
-        string $sort = 'newest'
+        string $sort = 'newest',
+        ?bool $isFavorite = null
     ): LengthAwarePaginator
     {
         // 並び替え設定
@@ -63,6 +64,11 @@ class ExpressionService
         // 話者絞り込み
         if($speakerCategoryId !== null){
             $query->where('speaker_category_id', $speakerCategoryId);
+        }
+
+        // お気に入り絞り込み
+        if($isFavorite !== null){
+            $query->where('is_favorite', $isFavorite);
         }
 
         // 1ページの件数
