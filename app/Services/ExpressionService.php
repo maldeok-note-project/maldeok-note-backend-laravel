@@ -29,12 +29,28 @@ class ExpressionService
 
 
     // 表現一覧
-    public function getAll(User $user, ?string $search = null, ?int $speakerCategoryId = null): LengthAwarePaginator
+    public function getAll(
+        User $user, 
+        ?string $search = null, 
+        ?int $speakerCategoryId = null,
+        string $sort = 'newest'
+    ): LengthAwarePaginator
     {
+        // 並び替え設定
+        $sortOption = [
+            'newest' => ['created_at', 'desc'], // 登録が新しい順
+            'oldest' => ['created_at', 'asc'], // 登録が古い順
+            'heard_at_desc' => ['heard_at', 'desc'], // 聞いた日が新しい順
+            'heard_at_asc' => ['heard_at', 'asc'], // 聞いた日が古い順
+        ];
+
+        // エラー値の場合はデフォルト
+        [$column, $direction] = $sortOption[$sort] ?? $sortOption['newest'];
+
         // クエリ作成
         $query = $user->expressions()
         ->with('speakerCategory') //カテゴリ取得
-        ->latest(); // 新しい順
+        ->orderBy($column, $direction);
 
         // searchがあれば絞り込み
         if($search !== null){
