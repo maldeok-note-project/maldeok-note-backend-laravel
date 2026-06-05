@@ -36,8 +36,15 @@ class ExpressionController extends Controller
         // sortパラメータ取得
         $sort = $request->query('sort', 'newest'); 
 
+        // is_Favoriteパラメータ取得
+        $isFavorite = match($request->query('is_favorite')){
+            'true' => true,
+            'false' => false,
+            default => null,
+        };
+
         // Service経由で一覧取得
-        $expressions = $this->service->getAll($user, $search, $speakerCategoryId, $sort);
+        $expressions = $this->service->getAll($user, $search, $speakerCategoryId, $sort, $isFavorite);
 
         // 成功レスポンス
         return response()->json($expressions);
