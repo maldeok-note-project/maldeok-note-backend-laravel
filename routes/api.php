@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BadgeController;
 use App\Http\Controllers\ExpressionController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\SpeakerCategoryController;
@@ -84,4 +85,16 @@ Route::middleware('jwt.auth')->group(function () {
     */
     Route::patch('/expressions/{id}/favorite', [ExpressionController::class, 'toggleFavorite'])
         ->whereNumber('id');
+
+    
+    /*
+    |--------------------------------------------------------------------------
+    | バッジ API
+    |--------------------------------------------------------------------------
+    */
+    // 全バッジ一覧
+    Route::get('/badges', [BadgeController::class, 'index']);
+
+    // 取得バッジ一覧
+    Route::get('/badges/my', [BadgeController::class, 'my']);
 });

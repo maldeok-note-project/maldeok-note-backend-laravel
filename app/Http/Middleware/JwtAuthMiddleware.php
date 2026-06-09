@@ -2,14 +2,12 @@
 
 namespace App\Http\Middleware;
 
-// import
 use App\Models\RevokedToken;
 use App\Models\User;
 use Closure;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Http\Request;
-
 
 class JwtAuthMiddleware
 {
