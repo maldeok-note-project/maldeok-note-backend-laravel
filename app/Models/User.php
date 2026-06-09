@@ -65,6 +65,8 @@ class User extends Authenticatable
     // 獲得バッジ一覧
     public function badges()
     {
-        return $this->hasManyThrough(Badge::class, UserBadge::class);
+        return $this->belongsToMany(Badge::class, 'user_badges')
+            ->withPivot('unlocked_at')
+            ->withTimestamps();
     }
 }

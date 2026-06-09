@@ -62,7 +62,7 @@ class ExpressionController extends Controller
 
         // Service経由で表現作成
         try{
-            $expression = $this->service->create($user, $validated);
+            $result = $this->service->create($user, $validated);
         } catch (\DomainException $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -70,10 +70,18 @@ class ExpressionController extends Controller
         }
 
         // 成功レスポンス
-        return response()->json([
+        $response = [
             'message' => '表現を登録しました。',
-            'data' => $expression,
-        ], 201);
+            'data' => $result['expression'],
+        ];
+
+        // バッジ解放時のみ追加
+        if(!empty($result['unlocked_badges'])){
+            $response['unlocked_badges'] = $result['unlocked_badges'];
+        }
+
+        // 成功レスポンス
+        return response()->json($response, 201);
     }
 
 

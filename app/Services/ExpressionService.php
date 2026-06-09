@@ -4,14 +4,20 @@ namespace App\Services;
 
 use App\Models\Expression;
 use App\Models\User;
+use App\Services\BadgeService;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 
 // Controllerから呼び出されて、DB操作・業務ルールの処理
 class ExpressionService
 {
+    // BadgeService挿入
+    public function __construct(
+        private BadgeService $badgeService
+    ){}
+
     // 表現作成
-    public function create(User $user, array $data): Expression
+    public function create(User $user, array $data): array
     {
         // 自分のカテゴリか確認
         $exists = $user->speakerCategories()
@@ -24,7 +30,16 @@ class ExpressionService
         }
 
         // User経由で作成
-        return $user->expressions()->create($data);
+        $expression = $user->expressions()->create($data);
+
+        // バッジ解放チェック
+        $unlockedBadges = $this->badgeService->checkAndUnlock($user);
+
+        // レスポンス
+        return [
+            'expression' => $expression,
+            'unlocked_badges' => $unlockedBadges,
+        ];
     }
 
 
