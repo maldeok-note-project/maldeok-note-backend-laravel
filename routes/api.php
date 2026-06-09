@@ -84,4 +84,16 @@ Route::middleware('jwt.auth')->group(function () {
     */
     Route::patch('/expressions/{id}/favorite', [ExpressionController::class, 'toggleFavorite'])
         ->whereNumber('id');
+
+    
+    /*
+    |--------------------------------------------------------------------------
+    | バッジ API
+    |--------------------------------------------------------------------------
+    */
+    // 全バッジ一覧
+    Route::get('/badges', [BadgeController::class, 'index']);
+
+    // 自分の獲得バッジ一覧
+    Route::get('/badges/my', [BadgeController::class, 'my']);
 });
