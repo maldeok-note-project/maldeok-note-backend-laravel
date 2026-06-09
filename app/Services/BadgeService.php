@@ -4,8 +4,26 @@ namespace App\Services;
 
 use App\Models\Badge;
 use App\Models\User;
+use \Illuminate\Database\Eloquent\Collection;
 
 class BadgeService{
+
+    // 全バッジ一覧を取得
+    public function getAll(): Collection
+    {
+        return Badge::orderBy('condition')->get();
+    }
+
+
+    // 獲得したバッジ一覧
+    public function getMyBadges(User $user): Collection
+    {
+        return $user->userBadges()
+            ->with('badge')
+            ->orderBy('unlocked_at')
+            ->get();
+    }
+
 
     // 解放されたバッジを付与
     public function checkAndUnlock(User $user): array
