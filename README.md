@@ -1,59 +1,158 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 말덕노트（Maldeok Note）- Backend API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> 韓国語の表現を「誰が・いつ・どこで使ったか」と一緒に記録する、コレクション型学習アプリのバックエンドAPI
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📖 プロジェクト概要
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+韓国語を学ぶ中で「推しや友達が実際に使っていた表現を、思い出ごと残したい」という課題から生まれたアプリです。
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+単語帳アプリとは異なり、**誰がどんな場面で使ったか**まで記録できるのが特徴です。登録数に応じてバッジが解放される実績システムも備えており、コレクションする楽しさも取り入れています。
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## ⚙️ 技術スタック
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| 項目 | 内容 |
+|------|------|
+| 言語 | PHP 8.4 |
+| フレームワーク | Laravel 12 |
+| 認証 | JWT（firebase/php-jwt） |
+| DB（開発） | SQLite |
+| 実行環境 | Docker（Laravel Sail） |
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🗂 主な機能
 
-### Premium Partners
+- **認証** - 会員登録 / ログイン / ログアウト
+- **表現CRUD** - 表現の登録・一覧・詳細・編集・削除
+- **お気に入り** - 表現のお気に入りON/OFF
+- **検索** - フレーズ・意味によるキーワード検索
+- **絞り込み** - 話者カテゴリ・お気に入りでフィルタリング
+- **並び替え** - 登録日・聞いた日での並び替え
+- **バッジ** - 登録数に応じた実績バッジの解放（データ層実装済み）
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## 🌐 API エンドポイント
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 認証
 
-## Code of Conduct
+| メソッド | パス | 説明 |
+|----------|------|------|
+| POST | `/api/register` | 会員登録 |
+| POST | `/api/login` | ログイン |
+| POST | `/api/logout` | ログアウト |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 話者カテゴリ
 
-## Security Vulnerabilities
+| メソッド | パス | 説明 |
+|----------|------|------|
+| GET | `/api/speaker-categories` | 一覧取得 |
+| POST | `/api/speaker-categories` | 作成 |
+| PATCH | `/api/speaker-categories/{id}` | 更新 |
+| DELETE | `/api/speaker-categories/{id}` | 削除 |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 表現
 
-## License
+| メソッド | パス | 説明 |
+|----------|------|------|
+| GET | `/api/expressions` | 一覧取得（検索・絞り込み・並び替え対応） |
+| POST | `/api/expressions` | 登録 |
+| GET | `/api/expressions/{id}` | 詳細取得 |
+| PATCH | `/api/expressions/{id}` | 更新 |
+| DELETE | `/api/expressions/{id}` | 削除 |
+| PATCH | `/api/expressions/{id}/favorite` | お気に入りトグル |
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+#### クエリパラメータ（一覧取得）
+
+| パラメータ | 説明 | 例 |
+|------------|------|----|
+| `search` | キーワード検索（phrase / meaning） | `?search=진짜` |
+| `speaker_category_id` | 話者カテゴリで絞り込み | `?speaker_category_id=1` |
+| `is_favorite` | お気に入りで絞り込み | `?is_favorite=true` |
+| `sort` | 並び替え | `?sort=newest` / `oldest` / `heard_at_desc` / `heard_at_asc` |
+
+### バッジ
+
+| メソッド | パス | 説明 |
+|----------|------|------|
+| GET | `/api/badges` | 全バッジ一覧 |
+| GET | `/api/badges/my` | 自分の獲得バッジ一覧 |
+
+---
+
+## 🚀 ローカル環境セットアップ
+
+### 前提条件
+
+- Docker Desktop がインストール済みであること
+
+### 手順
+
+```bash
+# 1. リポジトリをクローン
+git clone https://github.com/maldeok-note-project/maldeok-note-backend-laravel.git
+cd maldeok-note-backend-laravel
+
+# 2. 依存パッケージをインストール
+composer install
+
+# 3. 環境変数ファイルを作成
+cp .env.example .env
+
+# 4. アプリケーションキーを生成
+./vendor/bin/sail artisan key:generate
+
+# 5. Sailを起動
+./vendor/bin/sail up -d
+
+# 6. マイグレーション＆シード実行
+./vendor/bin/sail artisan migrate --seed
+```
+
+起動後、`http://localhost` でAPIにアクセスできます。
+
+---
+
+## 🏗 アーキテクチャ
+
+```
+Route → Controller → Service → Model
+```
+
+- **Controller** - リクエストの受け取りとレスポンスの返却のみ担当
+- **Service** - ビジネスロジック（実際の処理内容）を担当
+- **Model** - データベースとのやり取りを担当
+
+### 認証フロー
+
+JWTトークンをAuthorizationヘッダーで受け取り、`JwtAuthMiddleware`で検証します。認証済みユーザーは `$request->attributes->get('auth_user')` で取得します。
+
+---
+
+## 🏅 バッジ一覧
+
+| バッジ名 | 解放条件 |
+|----------|----------|
+| 入덕 | 表現を1個登録 |
+| 찐팬 予備軍 | 表現を10個登録 |
+| 현장러 | 表現を30個登録 |
+| 고인물 | 表現を50個登録 |
+| 진짜 말덕 | 表現を100個登録 |
+
+---
+
+## 📁 ブランチ戦略
+
+`main` ← `develop` ← `feature/xxx`
+
+1機能 = 1ブランチで開発し、PRレビューを経てマージします。
+
+---
+
+## 📝 ライセンス
+
+このプロジェクトはポートフォリオ目的で開発されています。
