@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BadgeController;
 use App\Http\Controllers\ExpressionController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\SpeakerCategoryController;
