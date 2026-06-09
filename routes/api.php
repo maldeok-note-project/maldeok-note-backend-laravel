@@ -95,6 +95,6 @@ Route::middleware('jwt.auth')->group(function () {
     // 全バッジ一覧
     Route::get('/badges', [BadgeController::class, 'index']);
 
-    // 自分の獲得バッジ一覧
+    // 取得バッジ一覧
     Route::get('/badges/my', [BadgeController::class, 'my']);
 });
