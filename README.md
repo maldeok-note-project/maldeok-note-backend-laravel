@@ -1,4 +1,4 @@
-# 말덕노트（Maldeok Note）- Backend API
+# 📝말덕노트（Maldeok Note）- Backend API
 
 > 韓国語の表現を「誰が・いつ・どこで使ったか」と一緒に記録する、コレクション型学習アプリのバックエンドAPI
 
