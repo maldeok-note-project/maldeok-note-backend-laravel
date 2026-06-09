@@ -16,12 +16,19 @@ class BadgeService{
 
 
     // 獲得したバッジ一覧
-    public function getMyBadges(User $user): Collection
+    public function getMyBadges(User $user)
     {
         return $user->userBadges()
             ->with('badge')
             ->orderBy('unlocked_at')
-            ->get();
+            ->get()
+            ->map(fn($userBadge) => [
+                'id' => $userBadge->badge->id,
+                'name' => $userBadge->badge->name,
+                'description' => $userBadge->badge->description,
+                'condition' => $userBadge->badge->condition,
+                'unlocked_at' => $userBadge->unlocked_at,
+            ]);
     }
 
 
