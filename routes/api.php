@@ -1,0 +1,100 @@
+<?php
+
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BadgeController;
+use App\Http\Controllers\ExpressionController;
+use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\SpeakerCategoryController;
+use Illuminate\Support\Facades\Route;
+
+
+/*
+|--------------------------------------------------------------------------
+| 認証が不要なAPI
+|--------------------------------------------------------------------------
+*/
+// 会員登録
+Route::post('/register', [AuthController::class, 'register']);
+
+// ログイン
+Route::post('/login', [AuthController::class, 'login']);
+
+
+/*
+|--------------------------------------------------------------------------
+| 認証が必要なAPI
+|--------------------------------------------------------------------------
+*/
+Route::middleware('jwt.auth')->group(function () {
+    // ユーザー情報更新
+    Route::patch('/me', [UserProfileController::class, 'update']);
+    
+    // アカウント削除
+    Route::delete('/me', [UserProfileController::class, 'destroy']);
+    
+    // ログアウト
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | 話者カテゴリ API
+    |--------------------------------------------------------------------------
+    */
+    // カテゴリ作成
+    Route::post('/speaker-categories', [SpeakerCategoryController::class, 'store']);
+
+    // カテゴリ一覧
+    Route::get('/speaker-categories', [SpeakerCategoryController::class, 'index']);
+
+    // カテゴリ編集
+    Route::patch('/speaker-categories/{id}', [SpeakerCategoryController::class, 'update']);
+
+    // カテゴリ削除
+    Route::delete('/speaker-categories/{id}', [SpeakerCategoryController::class, 'destroy']);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CRUD API
+    |--------------------------------------------------------------------------
+    */
+    // 表現作成
+    Route::post('/expressions', [ExpressionController::class, 'store']);
+    
+    // 表現一覧
+    Route::get('expressions', [ExpressionController::class, 'index']); 
+
+    // 表現詳細
+    Route::get('expressions/{id}', [ExpressionController::class, 'show'])
+        ->whereNumber('id');
+
+    // 表現編集
+    Route::patch('expressions/{id}', [ExpressionController::class, 'update'])
+        ->whereNumber('id');
+
+    // 表現削除
+    Route::delete('expressions/{id}', [ExpressionController::class, 'destroy'])
+        ->whereNumber('id');
+
+    
+    /*
+    |--------------------------------------------------------------------------
+    | お気に入り
+    |--------------------------------------------------------------------------
+    */
+    Route::patch('/expressions/{id}/favorite', [ExpressionController::class, 'toggleFavorite'])
+        ->whereNumber('id');
+
+    
+    /*
+    |--------------------------------------------------------------------------
+    | バッジ API
+    |--------------------------------------------------------------------------
+    */
+    // 全バッジ一覧
+    Route::get('/badges', [BadgeController::class, 'index']);
+
+    // 取得バッジ一覧
+    Route::get('/badges/my', [BadgeController::class, 'my']);
+});

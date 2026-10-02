@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Badge;
+use App\Models\Expression;
+use App\Models\SpeakerCategory;
+use App\Models\UserBadge;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,37 +16,57 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    // 登録・更新を許可するカラム
     protected $fillable = [
         'name',
         'email',
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
+    // APIのレスポンスに含めないカラム
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    // カラムの型変換
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+
+    // ユーザーが登録した表現一覧
+    public function expressions()
+    {
+        // Laravelが自動で「users.id ← expressions.user_id」を繋いでくれる
+        return $this->hasMany(Expression::class);
+    }
+
+
+    // ユーザーが作成した話者カテゴリ一覧
+    public function speakerCategories()
+    {
+        // 「users.id ← speaker_categories.user_id」で自動連結
+        return $this->hasMany(SpeakerCategory::class);
+    }
+
+
+    // バッジの獲得履歴
+    public function userBadges()
+    {
+        return $this->hasMany(UserBadge::class);
+    }
+
+
+    // 獲得バッジ一覧
+    public function badges()
+    {
+        return $this->belongsToMany(Badge::class, 'user_badges')
+            ->withPivot('unlocked_at')
+            ->withTimestamps();
     }
 }
